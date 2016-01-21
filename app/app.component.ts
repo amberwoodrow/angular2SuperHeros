@@ -1,19 +1,6 @@
 import {Component} from 'angular2/core';
-
-// Why a Hero interface and not a Hero class? We want a strongly typed Hero.
-// We get strong typing with either option. Our choice depends on how we
-// intend to use the Hero.
-// If we need a Hero that goes beyond simple properties, a Hero with logic
-// and behavior, we must define a class. If we only need type checking,
-// the interface is sufficient and lighter weight.
-// Lighter weight? Transpiling a class to JavaScript produces code.
-// Transpiling an interface produces — nothing. If the class does nothing
-// (and there is nothing for a Hero class to do right now), we prefer an
-// interface.
-interface Hero {
-  id: number;
-  name: string;
-}
+import {Hero} from './hero';
+import {HeroDetailComponent} from './hero-detail.component';
 
 // 1. ES2015 template string ``
 // 2. Selector specifies a simple CSS selector for a host HTML element named my-app
@@ -27,25 +14,18 @@ interface Hero {
 @Component({
     selector: 'my-app',
     template:`
-      <h1>{{title}}</h1>
-      <h2>My Heroes</h2>
-      <ul class="heroes">
-        <li *ngFor="#hero of heroes"
-          [class.selected]="hero === selectedHero"
-          (click)="onSelect(hero)">
-          <span class="badge">{{hero.id}}</span> {{hero.name}}
-        </li>
-      </ul>
-      <div *ngIf="selectedHero">
-        <h2>{{selectedHero.name}} details!</h2>
-        <div><label>id: </label>{{selectedHero.id}}</div>
-        <div>
-          <label>name: </label>
-          <input [(ngModel)]="selectedHero.name" placeholder="name"/>
-        </div>
-      </div>
-      `,
-      styles:[`
+    <h1>{{title}}</h1>
+    <h2>My Heroes</h2>
+    <ul class="heroes">
+      <li *ngFor="#hero of heroes"
+        [class.selected]="hero === selectedHero"
+        (click)="onSelect(hero)">
+        <span class="badge">{{hero.id}}</span> {{hero.name}}
+      </li>
+    </ul>
+    <my-hero-detail [hero]="selectedHero"></my-hero-detail>
+  `,
+    styles:[`
         .selected {
           background-color: #CFD8DC !important;
           color: white;
@@ -92,15 +72,16 @@ interface Hero {
           margin-right: .8em;
           border-radius: 4px 0px 0px 4px;
         }
-    `]
+      `],
+    directives: [HeroDetailComponent]
 })
 // styles will only apply to our AppComponent and won't "leak" to the outer HTML.
 
 export class AppComponent {
   public title = 'Tour of Heroes';
-  // initialize hero
-  public heroes = HEROES;
+  public heroes = HEROES; // initalize heroes
   public selectedHero: Hero;
+
   onSelect(hero: Hero) { this.selectedHero = hero; }
 }
 
