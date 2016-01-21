@@ -1,6 +1,10 @@
-import {Component} from 'angular2/core';
+import {Component, OnInit} from 'angular2/core';
 import {Hero} from './hero';
 import {HeroDetailComponent} from './hero-detail.component';
+import {HeroService} from './hero.service';
+// defines a private _heroService property and identifies it as a HeroService injection site.
+// We have to teach the injector how to make a HeroService by registering a HeroService provider.
+// constructor(private _heroService: HeroService) { }
 
 // 1. ES2015 template string ``
 // 2. Selector specifies a simple CSS selector for a host HTML element named my-app
@@ -73,31 +77,26 @@ import {HeroDetailComponent} from './hero-detail.component';
           border-radius: 4px 0px 0px 4px;
         }
       `],
-    directives: [HeroDetailComponent]
+    directives: [HeroDetailComponent],
+    providers: [HeroService]
 })
 // tell Angular about components through the metadata directives array
 // styles will only apply to our AppComponent and won't "leak" to the outer HTML.
 
 export class AppComponent {
   public title = 'Tour of Heroes';
-  public heroes = HEROES; // initalize heroes
+  public heroes: Hero[];
   public selectedHero: Hero;
 
+  constructor(private _heroService: HeroService) { }
+  getHeroes() {
+    this._heroService.getHeroes().then(heroes => this.heroes = heroes);
+  }
+  ngOnInit() {
+    this.getHeroes();
+  }
   onSelect(hero: Hero) { this.selectedHero = hero; }
 }
-
-var HEROES: Hero[] = [
-  { "id": 11, "name": "Mr. Nice" },
-  { "id": 12, "name": "Narco" },
-  { "id": 13, "name": "Bombasto" },
-  { "id": 14, "name": "Celeritas" },
-  { "id": 15, "name": "Magneta" },
-  { "id": 16, "name": "RubberMan" },
-  { "id": 17, "name": "Dynama" },
-  { "id": 18, "name": "Dr IQ" },
-  { "id": 19, "name": "Magma" },
-  { "id": 20, "name": "Tornado" }
-];
 
 // exporting turns the file into a module
 // The name of the file (without extension) is usually the name of the module
