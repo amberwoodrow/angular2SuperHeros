@@ -75,6 +75,7 @@ import {HeroDetailComponent} from './hero-detail.component';
       `],
     directives: [HeroDetailComponent]
 })
+// tell Angular about components through the metadata directives array
 // styles will only apply to our AppComponent and won't "leak" to the outer HTML.
 
 export class AppComponent {

@@ -15,6 +15,8 @@ import {Hero} from './hero';
   `,
   inputs: ['hero']
 })
+// must declare hero as input in input array
+
 export class HeroDetailComponent {
   public hero: Hero;
 }
